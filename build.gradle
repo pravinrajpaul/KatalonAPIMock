@@ -1,0 +1,50 @@
+plugins {
+  id 'java-library'
+  id 'groovy'
+  id 'com.github.johnrengelman.shadow' version '7.1.2'
+  id 'com.katalon.gradle-plugin' version '0.1.1'
+}
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(8)
+    }
+}
+
+repositories {
+  mavenCentral()
+  jcenter()
+}
+
+def pluginSources = [
+  'Keywords',
+  'Test Listeners',
+  'Include/scripts/groovy'
+]
+
+sourceSets {
+   main {
+    groovy {
+      srcDirs = ['Keywords', 'Include/scripts/groovy', 'Test Listeners']
+      srcDir 'Libs'
+    }
+  }
+}
+shadowJar {
+  exclude 'Temp*.class'
+}
+
+groovydoc {
+  source = pluginSources
+  docTitle = 'Zip Custom Keywords'
+}
+
+katalon {
+  dependencyPrefix = "com.katalon"
+  minimize = false
+}
+
+dependencies {
+	implementation 'com.github.tomakehurst:wiremock-jre8:2.35.0'
+  	implementation 'com.google.guava:guava:32.1.1-jre'
+}
